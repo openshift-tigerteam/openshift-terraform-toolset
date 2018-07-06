@@ -1,20 +1,21 @@
 resource "aws_instance" "infras" {
-  count = "${var.infra["count"]}"
-  ami           = "ami-0b1e356e"
-  instance_type = "m4.2xlarge"
-  key_name = "${var.key_name}"
-  security_groups  = ["${var.security_group}"]
+  count                = "${var.infra["count"]}"
+  ami                  = "ami-0b1e356e"
+  instance_type        = "m4.2xlarge"
+  key_name             = "${var.key_name}"
+  security_groups      = ["${var.security_group}"]
+  iam_instance_profile = "${aws_iam_role.node.id}"
 
   root_block_device {
-    volume_size = "${var.infra["root_volume_size"]}"
-    volume_type = "gp2"
+    volume_size           = "${var.infra["root_volume_size"]}"
+    volume_type           = "gp2"
     delete_on_termination = true
   }
 
   ebs_block_device {
-    device_name = "/dev/sdb"
-    volume_size = "${var.infra["docker_volume_size"]}"
-    volume_type = "gp2"
+    device_name           = "/dev/sdb"
+    volume_size           = "${var.infra["docker_volume_size"]}"
+    volume_type           = "gp2"
     delete_on_termination = true
   }
 
@@ -29,7 +30,7 @@ resource "aws_instance" "infras" {
   }
 
   provisioner "file" {
-    source = "../../files/docker-storage-setup"
+    source      = "../../files/docker-storage-setup"
     destination = "/home/ec2-user/docker-storage-setup"
   }
 
@@ -39,9 +40,10 @@ resource "aws_instance" "infras" {
       "sudo /usr/bin/docker-storage-setup",
     ]
   }
+
   connection {
-    type     = "ssh"
-    user     = "ec2-user"
+    type        = "ssh"
+    user        = "ec2-user"
     private_key = "${file(var.private_key_path)}"
   }
 

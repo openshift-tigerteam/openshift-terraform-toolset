@@ -1,27 +1,28 @@
 resource "aws_instance" "master" {
-  count = "${var.master["count"]}"
-  ami           = "${var.ami}"
-  instance_type = "${var.master["instance_type"]}"
-  key_name = "${var.key_name}"
-  security_groups  = ["${var.security_group}"]
+  count                = "${var.master["count"]}"
+  ami                  = "${var.ami}"
+  instance_type        = "${var.master["instance_type"]}"
+  key_name             = "${var.key_name}"
+  security_groups      = ["${var.security_group}"]
+  iam_instance_profile = "${aws_iam_role.master.id}"
 
   root_block_device {
-    volume_size = "${var.master["root_volume_size"]}"
-    volume_type = "gp2"
+    volume_size           = "${var.master["root_volume_size"]}"
+    volume_type           = "gp2"
     delete_on_termination = true
   }
 
   ebs_block_device {
-    device_name = "/dev/sdb"
-    volume_size = "${var.master["docker_volume_size"]}"
-    volume_type = "gp2"
+    device_name           = "/dev/sdb"
+    volume_size           = "${var.master["docker_volume_size"]}"
+    volume_type           = "gp2"
     delete_on_termination = true
   }
 
   ebs_block_device {
-    device_name = "/dev/sdc"
-    volume_size = "${var.master["nfs_volume_size"]}"
-    volume_type = "gp2"
+    device_name           = "/dev/sdc"
+    volume_size           = "${var.master["nfs_volume_size"]}"
+    volume_type           = "gp2"
     delete_on_termination = true
   }
 
@@ -36,7 +37,7 @@ resource "aws_instance" "master" {
   }
 
   provisioner "file" {
-    source = "../../files/docker-storage-setup"
+    source      = "../../files/docker-storage-setup"
     destination = "/home/ec2-user/docker-storage-setup"
   }
 
@@ -48,8 +49,8 @@ resource "aws_instance" "master" {
   }
 
   connection {
-    type     = "ssh"
-    user     = "ec2-user"
+    type        = "ssh"
+    user        = "ec2-user"
     private_key = "${file(var.private_key_path)}"
   }
 
