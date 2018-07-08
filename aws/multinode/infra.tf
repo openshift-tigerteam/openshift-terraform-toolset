@@ -47,6 +47,7 @@ resource "aws_instance" "infras" {
     private_key = "${file(var.private_key_path)}"
   }
 
+  # TODO: Add tag for clusterid e.g., `kubernetes.io/cluster/<name>,Value=<clusterid>`
   tags {
     Name = "${var.subdomain}-infra-${count.index + 1}"
   }

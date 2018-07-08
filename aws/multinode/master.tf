@@ -54,6 +54,7 @@ resource "aws_instance" "master" {
     private_key = "${file(var.private_key_path)}"
   }
 
+  # TODO: Add tag for clusterid e.g., `kubernetes.io/cluster/<name>,Value=<clusterid>`
   tags {
     Name = "${var.subdomain}-master-${count.index + 1}"
   }
