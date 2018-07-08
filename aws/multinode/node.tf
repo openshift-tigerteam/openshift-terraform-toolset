@@ -1,3 +1,4 @@
+# TODO: Convert to ASG
 resource "aws_instance" "nodes" {
   count                = "${var.node["count"]}"
   ami                  = "ami-0b1e356e"

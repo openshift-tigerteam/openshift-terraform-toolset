@@ -1,3 +1,4 @@
+# TODO: Convert to ASG
 resource "aws_instance" "infras" {
   count                = "${var.infra["count"]}"
   ami                  = "ami-0b1e356e"

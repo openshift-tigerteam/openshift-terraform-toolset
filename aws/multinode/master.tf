@@ -1,3 +1,4 @@
+# TODO: Add EBS for etcd
 resource "aws_instance" "master" {
   count                = "${var.master["count"]}"
   ami                  = "${var.ami}"
